@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Markdown Live Preview</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.3.1/styles/default.min.css" rel="stylesheet">
+  <style>
+    body {
+      padding-top: 20px;
+    }
+    #markdown-content {
+      padding: 20px;
+      background: #fff;
+      border-radius: 5px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      overflow-y: auto;
+    }
+    pre code {
+      padding: 10px;
+      background: #f8f9fa;
+      border-radius: 5px;
+    }
+    .editor, .preview {
+      height: 400px;
+    }
+    .reference {
+      height: 400px;
+      overflow-y: auto;
+    }
+    .reference pre {
+      background: #f8f9fa;
+      padding: 10px;
+      border-radius: 5px;
+    }
+  </style>
+</head>
+<body class="bg-light">
+  <div class="container mt-5">
+    <h1 class="mb-4">Markdown Viewer</h1>
+    <input type="file" id="fileInput" class="form-control mb-4" accept=".md,.markdown">
+    <hr>
+    <h1 class="mb-4">Markdown Live Preview</h1>
+    <div class="row">
+      <div class="col-md-6">
+        <textarea id="markdown-input" class="form-control editor" placeholder="Write or paste your markdown here..."></textarea>
+      </div>
+      <div class="col-md-6">
+        <div id="markdown-content" class="preview bg-white p-4 border rounded"></div>
+      </div>
+    </div>
+    <h2 class="mt-5">Markdown Reference</h2>
+    <div class="reference bg-white p-4 border rounded" >
+      <h3>Headers</h3>
+      <pre># H1
+## H2
+### H3</pre>
+
+      <h3>Emphasis</h3>
+      <pre>*italic* or _italic_
+**bold** or __bold__</pre>
+
+      <h3>Lists</h3>
+      <pre>- Item 1
+- Item 2
+  - Subitem 1
+  - Subitem 2</pre>
+  <h3>List Tasks</h3>
+  <pre>
+  # Lista de Tareas
+  
+  - [ ] Tarea 1
+  - [x] Tarea 2 (completada)
+  - [ ] Tarea 3
+  </pre>
+      <h3>Links</h3>
+      <pre>[OpenAI](https://www.openai.com)</pre>
+
+      <h3>Images</h3>
+      <pre>![alt text](image.jpg)</pre>
+
+      <h3>Code</h3>
+      <pre>\`code\`
+
+        ```javascript
+        function saludo() {
+          console.log('Hola, mundo!');
+        }
+        saludo();</pre>
+
+      <h3>Blockquotes</h3>
+      <pre>> This is a blockquote.</pre>
+
+      <h3>Horizontal Rule</h3>
+      <pre>---</pre>
+
+      <h3>Tables</h3>
+      <pre>
+| Header 1 | Header 2 |
+| --- | --- |
+| Row 1 Col 1 | Row 1 Col 2 |
+| Row 2 Col 1 | Row 2 Col 2 |
+</pre>
+
+    </div>
+  </div>
+
+  <!-- Load Marked.js -->
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <!-- Load Highlight.js -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.3.1/highlight.min.js"></script>
+  <script>
+    document.getElementById('markdown-input').addEventListener('input', function(event) {
+      const markdown = event.target.value;
+      const html = marked.parse(markdown);
+      document.getElementById('markdown-content').innerHTML = html;
+      document.querySelectorAll('pre code').forEach((block) => {
+        hljs.highlightBlock(block);
+      });
+    });
+
+    // Configure marked.js
+    marked.setOptions({
+      breaks: true,
+      highlight: function(code, lang) {
+        const language = lang || 'plaintext';
+        return hljs.highlightAuto(code, [language]).value;
+      }
+    });
+  </script>
+  <!-- Load .md -->
+  <script>
+    document.getElementById('fileInput').addEventListener('change', function(event) {
+      const file = event.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          try {
+            const markdown = e.target.result;
+            const html = marked.parse(markdown);
+            document.getElementById('markdown-input').innerHTML = html;
+            document.querySelectorAll('pre code').forEach((block) => {
+              hljs.highlightBlock(block);
+            });
+          } catch (error) {
+            alert('Error processing the Markdown file. Please ensure it is a valid Markdown file.');
+            console.error('Markdown processing error:', error);
+          }
+        };
+        reader.readAsText(file);
+      } else {
+        alert('Please select a valid Markdown (.md) file.');
+      }
+    });
+
+    // Configure marked.js
+    marked.setOptions({
+      breaks: true,
+      highlight: function(code, lang) {
+        const language = lang || 'plaintext';
+        return hljs.highlightAuto(code, [language]).value;
+      }
+    });
+  </script>
+</body>
+</html>
