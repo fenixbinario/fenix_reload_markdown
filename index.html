@@ -23,10 +23,10 @@
       border-radius: 5px;
     }
     .editor, .preview {
-      height: 400px;
+      height: 650px;
     }
     .reference {
-      height: 400px;
+      height: 650px;
       overflow-y: auto;
     }
     .reference pre {
@@ -37,74 +37,79 @@
   </style>
 </head>
 <body class="bg-light">
-  <div class="container mt-5">
-    <h1 class="mb-4">Markdown Viewer</h1>
-    <input type="file" id="fileInput" class="form-control mb-4" accept=".md,.markdown">
-    <hr>
-    <h1 class="mb-4">Markdown Live Preview</h1>
-    <div class="row">
+  <div class="container-fluid  mt-2">
+    <div class="row justify-content-center">
       <div class="col-md-6">
+          <h1 class="mb-4 ">File Markdown Load</h1>
+          <input type="file" id="fileInput" class="form-control mb-4" accept=".md,.markdown">
+      </div>
+  </div>
+    <hr>
+    <h1 class="mb-4">Markdown Editor Live Preview</h1>
+    <div class="row">
+      <div class="col-12 col-md-6"> <!-- Ajuste aquí para responsividad -->
         <textarea id="markdown-input" class="form-control editor" placeholder="Write or paste your markdown here..."></textarea>
       </div>
-      <div class="col-md-6">
+      <div class="col-12 col-md-6"> <!-- Ajuste aquí para responsividad -->
         <div id="markdown-content" class="preview bg-white p-4 border rounded"></div>
       </div>
     </div>
     <h2 class="mt-5">Markdown Reference</h2>
-    <div class="reference bg-white p-4 border rounded" >
+    <div class="reference bg-white p-4 border rounded">
       <h3>Headers</h3>
       <pre># H1
-## H2
-### H3</pre>
-
+  ## H2
+  ### H3</pre>
+  
       <h3>Emphasis</h3>
       <pre>*italic* or _italic_
-**bold** or __bold__</pre>
-
+  **bold** or __bold__</pre>
+  
       <h3>Lists</h3>
       <pre>- Item 1
-- Item 2
-  - Subitem 1
-  - Subitem 2</pre>
-  <h3>List Tasks</h3>
-  <pre>
+  - Item 2
+    - Subitem 1
+    - Subitem 2</pre>
+      <h3>List Tasks</h3>
+      <pre>
   # Lista de Tareas
   
   - [ ] Tarea 1
   - [x] Tarea 2 (completada)
   - [ ] Tarea 3
-  </pre>
+      </pre>
       <h3>Links</h3>
       <pre>[OpenAI](https://www.openai.com)</pre>
-
+  
       <h3>Images</h3>
       <pre>![alt text](image.jpg)</pre>
-
+  
       <h3>Code</h3>
-      <pre>\`code\`
-
+      <pre>`code`
+  
         ```javascript
         function saludo() {
           console.log('Hola, mundo!');
         }
         saludo();</pre>
-
+  
       <h3>Blockquotes</h3>
       <pre>> This is a blockquote.</pre>
-
+  
       <h3>Horizontal Rule</h3>
       <pre>---</pre>
-
+  
       <h3>Tables</h3>
       <pre>
-| Header 1 | Header 2 |
-| --- | --- |
-| Row 1 Col 1 | Row 1 Col 2 |
-| Row 2 Col 1 | Row 2 Col 2 |
-</pre>
-
+  | Header 1 | Header 2 |
+  | --- | --- |
+  | Row 1 Col 1 | Row 1 Col 2 |
+  | Row 2 Col 1 | Row 2 Col 2 |
+  </pre>
+  
     </div>
   </div>
+  
 
   <!-- Load Marked.js -->
   <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
@@ -139,7 +144,8 @@
           try {
             const markdown = e.target.result;
             const html = marked.parse(markdown);
-            document.getElementById('markdown-input').innerHTML = html;
+            document.getElementById('markdown-input').innerHTML = markdown;
+            document.getElementById('markdown-content').innerHTML = html;
             document.querySelectorAll('pre code').forEach((block) => {
               hljs.highlightBlock(block);
             });
